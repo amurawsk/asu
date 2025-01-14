@@ -46,6 +46,7 @@ Program pozwala na wprowadzenie własnego pliku konfiguracyjnego (poprzez opcję
 
 
 ## Przykłady wywołań
+Uwaga! Poniższe przykłady wywoływane są dla głównego katalogu ./X
 ### Wywołanie programu tylko dla pustych plików:
 ```bash
 python main.py -x ./X -e ask
@@ -73,4 +74,9 @@ python main.py -x ./X -d ./Y1 ./Y2 -e ask
 ### Wywołanie programu z automatyczną akcją dla plików z problematycznymi nazwami
 ```bash
 python main.py -x ./X -p y
+```
+
+### Wywołanie programu ze wszystkimi funkcjonalnościami dla głównego katalogu X i pozostałych katalogów ./Y1 i ./Y2
+```bash
+python main.py -x ./X -d ./Y1 ./Y2 -e ask -t ask -p ask -c ask -a ask -m ask -s ask
 ```
