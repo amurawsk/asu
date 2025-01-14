@@ -4,7 +4,7 @@ import hashlib
 import logging
 import base64
 
-logging.basicConfig(level=logging.DEBUG, format="\n%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # ------------------- HELP ---------------------------
 def calculate_file_hash(file_path):

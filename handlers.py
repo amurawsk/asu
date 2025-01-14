@@ -1,7 +1,7 @@
 import utils
 import logging
 
-logging.basicConfig(level=logging.DEBUG, format="\n%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 def handle_empty(directories, action: str):
