@@ -36,7 +36,7 @@ Dla każdego takiego argumentu możliwe są 3 wartości do wprowadzenia przez u�
 Domyślny plik konfiguracyjny zawiera następującą zawartość:
 ```
 [DEFAULT]
-default_access = 755
+default_access = 644
 tricky_letters = :, ", ;, *, ?, $, #, ', |, \
 substitute = _
 tmp = ~, .tmp
