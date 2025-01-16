@@ -11,7 +11,6 @@ def load_config(file):
     default_access = config.get('DEFAULT', 'default_access')
     tmp = parse_list(config.get('DEFAULT', 'tmp'))
     tricky_letters = parse_list(config.get('DEFAULT', 'tricky_letters'))
-    print(tricky_letters)
     substitute = config.get('DEFAULT', 'substitute')
 
     return {

@@ -41,7 +41,7 @@ Domyślny plik konfiguracyjny zawiera następującą zawartość:
 ```
 [DEFAULT]
 default_access = 644
-tricky_letters = :, ", ;, *, ?, $, #, ', |, \
+tricky_letters = :,",;,*,?,$,#,',|,\
 substitute = _
 tmp = ~, .tmp
 ```
