@@ -1,20 +1,21 @@
+from __future__ import print_function
 import utils
 import logging
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
-def handle_empty(directories, action: str):
+def handle_empty(directories, action):
     if action == 'n':
         return
 
     file_paths = utils.detect_empty(directories)
-    print(f'\nFound {len(file_paths)} empty files')
+    print('\nFound {} empty files'.format(len(file_paths)))
     if action == 'y':
         utils.remove_files(file_paths)
     elif action == 'ask':
         for file_path in file_paths:
-            if utils.get_decision(f"{file_path} is empty. Remove it?"):
+            if utils.get_decision("{} is empty. Remove it?".format(file_path)):
                 utils.remove_files([file_path])
 
 
@@ -23,12 +24,12 @@ def handle_temporary(directories, temp_suffixes, action):
         return
 
     file_paths = utils.detect_temporary(directories, temp_suffixes)
-    print(f'\nFound {len(file_paths)} temporary files')
+    print('\nFound {} temporary files'.format(len(file_paths)))
     if action == 'y':
         utils.remove_files(file_paths)
     elif action == 'ask':
         for file_path in file_paths:
-            if utils.get_decision(f"{file_path} is temporary. Remove it?"):
+            if utils.get_decision("{} is temporary. Remove it?".format(file_path)):
                 utils.remove_files([file_path])
 
 
@@ -37,12 +38,12 @@ def handle_abnormal_permissions(directories, default_access, action):
         return
 
     file_paths = utils.detect_invalid_permissions(directories, default_access)
-    print(f'\nFound {len(file_paths)} files with abnormal permissions')
+    print('\nFound {} files with abnormal permissions'.format(len(file_paths)))
     if action == 'y':
         utils.change_permissions(file_paths, default_access)
     if action == 'ask':
         for file_path in file_paths:
-            if utils.get_decision(f"{file_path} has wrong permissions. Change it?"):
+            if utils.get_decision("{} has wrong permissions. Change it?".format(file_path)):
                 utils.change_permissions([file_path], default_access)
 
 
@@ -51,9 +52,9 @@ def handle_symbols_in_name(directories, tricky_letters, substitute, action):
         return
 
     file_paths = utils.detect_problematic_names(directories, tricky_letters)
-    print(f'\nFound {len(file_paths)} files with problematic names')
+    print('\nFound {} files with problematic names'.format(len(file_paths)))
     for file_path in file_paths:
-        if action == 'y' or (action == 'ask' and utils.get_decision(f"{file_path} contains problematic chars. Rename it?")):
+        if action == 'y' or (action == 'ask' and utils.get_decision("{} contains problematic chars. Rename it?".format(file_path))):
             utils.change_file_name(file_path, tricky_letters, substitute)
 
 
@@ -62,7 +63,7 @@ def handle_duplicates(directories, action):
         return
 
     duplicates = utils.detect_duplicates(directories)
-    print(f'\nFound {len(duplicates)} sets of files with same content')
+    print('\nFound {} sets of files with same content'.format(len(duplicates)))
     for files in duplicates.values():
         try:
             oldest = utils.get_oldest_file(files)
@@ -71,10 +72,10 @@ def handle_duplicates(directories, action):
                 utils.remove_files(other)
             if action == 'ask':
                 for file in other:
-                    if utils.get_decision(f"{file} is copy of {oldest}. Remove it?"):
+                    if utils.get_decision("{} is copy of {}. Remove it?".format(file, oldest)):
                         utils.remove_files([file])
         except ValueError:
-            logging.warning(f'Could not handle duplicates among group: {files}')
+            logging.warning('Could not handle duplicates among group: {}'.format(files))
             continue
 
 
@@ -83,7 +84,7 @@ def handle_same_name(directories, action):
         return
 
     same_name = utils.detect_same_name(directories)
-    print(f'\nFound {len(same_name)} sets of files with same name')
+    print('\nFound {} sets of files with same name'.format(len(same_name)))
     for files in same_name.values():
         try:
             newest = utils.get_newest_file(files)
@@ -92,10 +93,10 @@ def handle_same_name(directories, action):
                 utils.remove_files(other)
             if action == 'ask':
                 for file in other:
-                    if utils.get_decision(f"{file} is older then {newest}. Remove it?"):
+                    if utils.get_decision("{} is older than {}. Remove it?".format(file, newest)):
                         utils.remove_files([file])
         except ValueError:
-            logging.warning(f'Could not handle same name files among group: {files}')
+            logging.warning('Could not handle same name files among group: {}'.format(files))
             continue
 
 
@@ -104,7 +105,7 @@ def handle_missing_in_main(main_dir, other_dirs, action):
         return
 
     missing = utils.detect_not_in_main_dir(main_dir, other_dirs)
-    print(f'\nFound {len(missing)} files missing in main directory')
+    print('\nFound {} files missing in main directory'.format(len(missing)))
     for file_path in missing:
-        if action == 'y' or (action == 'ask' and utils.get_decision(f"{file_path} is not in {main_dir}. Move it?")):
+        if action == 'y' or (action == 'ask' and utils.get_decision("{} is not in {}. Move it?".format(file_path, main_dir))):
             utils.move_file_to_main_dir(file_path, main_dir)

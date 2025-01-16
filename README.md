@@ -1,4 +1,8 @@
 # Projekt ASU - pliki
+
+## Wymagania
+Do użycia projektu wymagany jest zainstalowany Python, a dodatkowo musi być zainstalowany moduł configparser (można to zrobić poleceniem `pip install configparser`)
+
 ## Użytkowanie
 Użycie skryptu:
 ```bash

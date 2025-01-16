@@ -10,14 +10,17 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %
 def calculate_file_hash(file_path):
     hash_sha256 = hashlib.sha256()
     with open(file_path, "rb") as file:
-        while chunk := file.read(4096):
+        while True:
+            chunk = file.read(4096)
+            if not chunk:
+                break
             hash_sha256.update(chunk)
     return base64.b64encode(hash_sha256.digest()).decode("utf-8")
 
 
 def get_decision(prompt):
     while True:
-        choice = input(f"{prompt} ({'Y/n'}): ").lower()
+        choice = raw_input("{0} (Y/n): ".format(prompt)).lower()
         if choice in ("", "y"):
             return True
         if choice == "n":
@@ -30,18 +33,18 @@ def remove_files(file_paths):
         try:
             if os.path.exists(file_path):
                 os.remove(file_path)
-                logging.info(f'Removed file {file_path=}')
+                logging.info('Removed file {file_path=%s}', file_path)
         except Exception:
-            logging.warning(f'Could not remove file {file_path=}')
+            logging.warning('Could not remove file {file_path=%s}', file_path)
 
 
 def change_permissions(file_paths, default_permissions):
     for file_path in file_paths:
         try:
             os.chmod(file_path, default_permissions)
-            logging.info(f'Changed file permissions {file_path=}')
+            logging.info('Changed file permissions {file_path=%s}', file_path)
         except Exception:
-            logging.warning(f'Could not change file permissions {file_path=}')
+            logging.warning('Could not change file permissions {file_path=%s}', file_path)
 
 
 def change_file_name(file_path, tricky_letters, substitute):
@@ -50,9 +53,9 @@ def change_file_name(file_path, tricky_letters, substitute):
         new_path = new_path.replace(letter, substitute)
     try:
         os.rename(file_path, new_path)
-        logging.info(f'Changed file name {file_path=}, {new_path=}')
+        logging.info('Changed file name {file_path=%s}, {new_path=%s}', file_path, new_path)
     except Exception:
-        logging.warning(f'Could not change file name {file_path=}')
+        logging.warning('Could not change file name {file_path=%s}', file_path)
 
 
 def get_oldest_file(file_paths):
@@ -60,7 +63,7 @@ def get_oldest_file(file_paths):
         oldest_file = min(file_paths, key=os.path.getctime)
         return oldest_file
     except Exception:
-        logging.error(f'Could not get file data for one or more files, {file_paths=}')
+        logging.error('Could not get file data for one or more files, {file_paths=%s}', file_paths)
         raise ValueError('Could not get some file data')
 
 
@@ -69,21 +72,21 @@ def get_newest_file(file_paths):
         newest_file = max(file_paths, key=os.path.getctime)
         return newest_file
     except Exception:
-        logging.error(f'Could not get file data for one or more files, {file_paths=}')
+        logging.error('Could not get file data for one or more files, {file_paths=%s}', file_paths)
         raise ValueError('Could not get some file data')
     
 
 def move_file_to_main_dir(file_path, main_dir):
     try:
-        relative_path = os.path.relpath(file_path, start=os.path.commonpath([file_path, main_dir]))
+        relative_path = os.path.relpath(file_path, start=os.path.commonprefix([file_path, main_dir]))
         new_file_path = os.path.join(main_dir, relative_path)
         new_dir = os.path.dirname(new_file_path)
         if not os.path.exists(new_dir):
             os.makedirs(new_dir)
         os.rename(file_path, new_file_path)
-        logging.info(f'Moved {file_path} to {new_file_path}')
+        logging.info('Moved %s to %s', file_path, new_file_path)
     except Exception:
-        logging.warning(f'Could not move {file_path=} to {main_dir=}')
+        logging.warning('Could not move file_path=%s to main_dir=%s', file_path, main_dir)
 
 # ------------------- DETECT ---------------------------
 def detect_empty(directories):

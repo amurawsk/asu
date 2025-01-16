@@ -1,20 +1,21 @@
-import configparser
+import ConfigParser
 
 
 def load_config(file):
     def parse_list(s):
-        return [item.strip() for item in s.split(',')]
+        return [item.strip() for item in s.split(',') if item.strip()]
 
-    config = configparser.ConfigParser()
+    config = ConfigParser.ConfigParser()
     config.read(file)
 
-    default_access = config['DEFAULT']['default_access']
-    tmp = parse_list(config['DEFAULT']['tmp'])
-    tricky_letters = parse_list(config['DEFAULT']['tricky_letters'])
-    substitute = config['DEFAULT']['substitute']
+    default_access = config.get('DEFAULT', 'default_access')
+    tmp = parse_list(config.get('DEFAULT', 'tmp'))
+    tricky_letters = parse_list(config.get('DEFAULT', 'tricky_letters'))
+    print(tricky_letters)
+    substitute = config.get('DEFAULT', 'substitute')
 
     return {
-        'default_access': int(default_access, base=8),
+        'default_access': int(default_access, 8),
         'tmp': tmp,
         'tricky_letters': tricky_letters,
         'substitute': substitute
